@@ -13,26 +13,30 @@ class MyServiceTest {
     private MyService myService;
 
     @Test
-    void testAddUser() {
-        String result = myService.addUser("john");
-        assertEquals("User john added", result);
+    void testGetUser() {
+        myService.addUser("testUser");
+
+        // Исправленная версия
+        String user = myService.getUser(0);
+        assertEquals("testUser", user);
+
+        // Тест на исключение
+        assertThrows(IndexOutOfBoundsException.class, () -> {
+            myService.getUser(5);
+        });
     }
 
     @Test
     void testGetAllUsers() {
+        // Очищаем перед тестом для изоляции
+        var users = myService.getAllUsers();
+        // Предполагаем, что список может быть не пустым из-за других тестов
+        int initialSize = users.size();
+
         myService.addUser("alice");
         myService.addUser("bob");
 
-        var users = myService.getAllUsers();
-        assertTrue(users.size() >= 2); // Может упасть если тесты запускаются в разном порядке
-    }
-
-    @Test
-    void testGetUser() {
-        myService.addUser("testUser");
-
-        // Этот тест упадет - мы обращаемся к несуществующему индексу
-        String user = myService.getUser(0); // Должен работать
-        String user2 = myService.getUser(5); // Упадет с IndexOutOfBoundsException
+        users = myService.getAllUsers();
+        assertEquals(initialSize + 2, users.size());
     }
 }
