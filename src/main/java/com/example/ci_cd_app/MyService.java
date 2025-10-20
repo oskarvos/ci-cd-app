@@ -11,18 +11,22 @@ public class MyService {
     private List<String> users = new ArrayList<>();
 
     public String addUser(String username) {
-        // Намеренный баг: не проверяем существование пользователя
         users.add(username);
         return "User " + username + " added";
     }
 
     public List<String> getAllUsers() {
-        return users;
+        return new ArrayList<>(users); // Возвращаем копию для безопасности
     }
 
     public String getUser(int index) {
-        // Опасный код: может упасть с IndexOutOfBoundsException
         return users.get(index);
     }
+
+    // ДОБАВЛЯЕМ МЕТОД ДЛЯ ТЕСТОВ - очищает список пользователей
+    public void clearUsers() {
+        users.clear();
+    }
 }
+
 
